@@ -119,6 +119,7 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl: "https://github.com/casosorg/casos-website/edit/master/",
+          sidebarCollapsed: false,
         },
         blog: {
           showReadingTime: true,
