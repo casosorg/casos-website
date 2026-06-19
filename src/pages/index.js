@@ -1,66 +1,86 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import clsx from "clsx";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import {useWindowSize} from "@docusaurus/theme-common";
 import styles from "./index.module.css";
 
-function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
-  const windowSize = useWindowSize();
-  const isMobile = windowSize === "mobile";
+function Typewriter({text, delay = 300}) {
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    let i = 0;
+    const t = setTimeout(() => {
+      const iv = setInterval(() => {
+        i++;
+        setDisplayed(text.slice(0, i));
+        if (i >= text.length) {
+          clearInterval(iv);
+          setDone(true);
+        }
+      }, 22);
+      return () => clearInterval(iv);
+    }, delay);
+    return () => clearTimeout(t);
+  }, [text, delay]);
 
   return (
-    <header className={clsx("hero hero--primary", styles.heroBanner)}>
+    <span>
+      {displayed}
+      <span className={clsx(styles.cursor, done && styles.cursorDone)}>_</span>
+    </span>
+  );
+}
+
+function HomepageHeader() {
+  return (
+    <header className={styles.heroBanner}>
       <div className="container">
-        <img
-          src="/img/logo.png"
-          alt="CasOS logo"
-          className={styles.heroLogo}
-          width={96}
-          height={96}
-        />
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        <p className="hero__subtitle" style={{maxWidth: 640, margin: "0 auto"}}>
-          {siteConfig.tagline}
-        </p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            style={{marginTop: "2rem", marginRight: isMobile ? "0.5rem" : "1.5rem", marginLeft: isMobile ? "0.5rem" : "1.5rem"}}
-            to="/docs/overview">
-            Get Started
-          </Link>
-          <Link
-            className="button button--outline button--secondary button--lg"
-            style={{marginTop: "2rem", marginRight: isMobile ? "0.5rem" : "1.5rem", marginLeft: isMobile ? "0.5rem" : "1.5rem"}}
-            href="https://casos.casnode.com">
-            Live Demo
-          </Link>
-        </div>
-        <div className={styles.heroBadges}>
-          <span className={styles.heroBadge}>
-            <svg className={styles.badgeIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-            </svg>
-            Embedded Kubernetes
-          </span>
-          <span className={styles.heroBadge}>
-            <svg className={styles.badgeIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-            Casdoor Auth
-          </span>
-          <span className={styles.heroBadge}>
-            <svg className={styles.badgeIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="2" y1="12" x2="22" y2="12"/>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-            </svg>
-            Open Source
-          </span>
+        <div className={styles.heroInner}>
+          <div className={styles.heroLeft}>
+            <div className={styles.heroEyebrow}>
+              <span className={styles.eyebrowPrompt}>$</span>
+              <span>casos <span className={styles.eyebrowVersion}>v0.1.0</span></span>
+            </div>
+            <h1 className={styles.heroTitle}>CasOS</h1>
+            <p className={styles.heroSubtitle}>
+              <Typewriter text="A cloud operating system built on Kubernetes." />
+            </p>
+            <p className={styles.heroDesc}>
+              Embeds the full Kubernetes control plane as a single binary.
+              No external cluster, no kubeadm, no extra moving parts.
+            </p>
+            <div className={styles.buttons}>
+              <Link className={styles.btnPrimary} to="/docs/overview">
+                Get started →
+              </Link>
+              <Link className={styles.btnGhost} href="https://casos.casnode.com">
+                Live demo
+              </Link>
+              <Link className={styles.btnGhost} href="https://github.com/casosorg/casos">
+                GitHub
+              </Link>
+            </div>
+          </div>
+
+          <div className={styles.heroRight}>
+            <div className={styles.asciiBlock}>
+              <pre className={styles.asciiPre}>{`┌─ casos ───────────────────────┐
+│                               │
+│  $ ./casos                    │
+│  > embedding k8s control...   │
+│  > starting api-server...     │
+│  > casdoor auth ready         │
+│  > dashboard at :14000  ✓     │
+│                               │
+│  nodes    1/1   running       │
+│  pods     0     pending       │
+│  svcs     1     active        │
+│                               │
+└───────────────────────────────┘`}</pre>
+            </div>
+          </div>
         </div>
       </div>
     </header>
@@ -69,75 +89,108 @@ function HomepageHeader() {
 
 const features = [
   {
+    tag: "core",
     title: "Embedded Kubernetes",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-        <path d="M2 17l10 5 10-5"/>
-        <path d="M2 12l10 5 10-5"/>
-      </svg>
-    ),
-    description: "Ships the full Kubernetes control plane as a single binary — API server, controller manager, and scheduler included. No external cluster, no kubeadm, no extra moving parts.",
+    description:
+      "Ships the full K8s control plane — API server, controller manager, scheduler — as one binary. Zero external dependencies.",
   },
   {
-    title: "Built-in Web Dashboard",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <rect x="3" y="3" width="7" height="7"/>
-        <rect x="14" y="3" width="7" height="7"/>
-        <rect x="14" y="14" width="7" height="7"/>
-        <rect x="3" y="14" width="7" height="7"/>
-      </svg>
-    ),
-    description: "Browse Nodes, Pods, Services, ConfigMaps, and ClusterRoleBindings through a clean UI. Pull images straight from DockerHub without touching the terminal.",
+    tag: "ui",
+    title: "Built-in Dashboard",
+    description:
+      "Inspect Nodes, Pods, Services, ConfigMaps, and CRBs from a browser. Pull images from DockerHub without touching a terminal.",
   },
   {
-    title: "Casdoor Authentication",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-      </svg>
-    ),
-    description: "OAuth2 / OIDC out of the box via Casdoor. Single sign-on, multi-tenant support, and 100+ identity providers — wire it up once and forget about auth middleware.",
+    tag: "auth",
+    title: "Casdoor Auth",
+    description:
+      "OAuth2 / OIDC via Casdoor out of the box. SSO, multi-tenant, 100+ identity providers. Configure once, done.",
   },
 ];
 
-function Feature({title, icon, description}) {
+function FeatureCard({tag, title, description}) {
   return (
     <div className="col col--4">
       <div className={styles.featureCard}>
-        <div className={styles.featureIcon}>{icon}</div>
-        <h3>{title}</h3>
-        <p>{description}</p>
+        <span className={styles.featureTag}>{tag}</span>
+        <h3 className={styles.featureTitle}>{title}</h3>
+        <p className={styles.featureDesc}>{description}</p>
       </div>
     </div>
   );
 }
 
+const STEPS = [
+  "$ curl -fsSL .../casos-linux-amd64 -o casos",
+  "$ chmod +x casos && ./casos",
+  "  → dashboard running at http://localhost:14000",
+];
+
 function QuickStart() {
+  const [step, setStep] = useState(0);
+  const started = useRef(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          let s = 0;
+          const iv = setInterval(() => {
+            s++;
+            setStep(s);
+            if (s >= STEPS.length) clearInterval(iv);
+          }, 550);
+        }
+      },
+      {threshold: 0.5}
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className={styles.quickstart}>
       <div className="container">
-        <h2 className={styles.sectionTitle}>Up in one command</h2>
-        <p className={styles.sectionLead}>
-          Download the binary, point it at a Casdoor instance, and you have a running Kubernetes cluster with a web UI.
-          No cluster provisioning, no CNI plugins to debug.
-        </p>
-        <div className={styles.codeBlock}>
-          <pre><code>{`# download and run
-curl -L https://github.com/casosorg/casos/releases/latest/download/casos-linux-amd64 -o casos
-chmod +x casos && ./casos
+        <div className={styles.qsGrid}>
+          <div className={styles.qsMeta}>
+            <p className={styles.qsTag}>// quickstart</p>
+            <h2 className={styles.qsTitle}>Up in one command</h2>
+            <p className={styles.qsDesc}>
+              Download the binary, run it, open the browser.
+              No cluster provisioning, no CNI plugins to debug.
+            </p>
+            <div className={styles.qsLinks}>
+              <Link className={styles.btnPrimary} to="/docs/get-started">
+                Full guide →
+              </Link>
+              <Link className={styles.btnGhost} href="https://github.com/casosorg/casos">
+                GitHub
+              </Link>
+            </div>
+          </div>
 
-# that's it — dashboard at http://localhost:14000`}</code></pre>
-        </div>
-        <div className={styles.quickstartLinks}>
-          <Link className="button button--primary button--md" to="/docs/get-started">
-            Full setup guide
-          </Link>
-          <Link className="button button--outline button--primary button--md" href="https://github.com/casosorg/casos">
-            View on GitHub
-          </Link>
+          <div className={styles.terminal} ref={ref}>
+            <div className={styles.termBar}>
+              <span className={styles.termTitle}>bash</span>
+            </div>
+            <div className={styles.termBody}>
+              {STEPS.slice(0, step).map((line, i) => (
+                <div key={i} className={clsx(
+                  styles.termLine,
+                  line.startsWith("  →") && styles.termSuccess
+                )}>
+                  {line}
+                </div>
+              ))}
+              {step < STEPS.length && (
+                <div className={styles.termLine}>
+                  <span className={styles.cursorDone}>_</span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -149,14 +202,14 @@ export default function Home() {
   return (
     <Layout
       title={siteConfig.title}
-      description="CasOS is a cloud operating system built on Kubernetes. Embeds the full Kubernetes control plane — no external cluster needed.">
+      description="CasOS — a cloud operating system with embedded Kubernetes. No external cluster needed.">
       <HomepageHeader />
       <main>
         <section className={styles.features}>
           <div className="container">
             <div className="row">
-              {features.map((props, idx) => (
-                <Feature key={idx} {...props} />
+              {features.map((f) => (
+                <FeatureCard key={f.tag} {...f} />
               ))}
             </div>
           </div>
