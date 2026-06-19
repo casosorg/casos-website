@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "casos-website",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["start", "--port", "3333", "--no-open"],
+      "port": 3333
+    }
+  ]
+}
