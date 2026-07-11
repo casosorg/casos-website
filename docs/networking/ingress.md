@@ -26,6 +26,15 @@ Open **Networking → Ingress** and click **Add Ingress**. You specify the names
 
 **Path type** controls how the path is matched. `Prefix` matches any URL that starts with the given path, so `/api` would also match `/api/users`. `Exact` matches only the literal path. `ImplementationSpecific` delegates the matching logic to the controller.
 
+## HTTPS / TLS
+
+CasOS can serve an Ingress host over HTTPS. Enable **TLS** for the host and provide a certificate in one of two ways:
+
+- **Let's Encrypt** — CasOS obtains and renews the certificate automatically using the ACME **HTTP-01** challenge. The host must be reachable over HTTP (port 80) from the internet so the challenge can complete.
+- **Upload a certificate** — supply your own certificate and private key.
+
+CasOS shows the certificate status for the Ingress so you can confirm it was issued and is still valid.
+
 ## Deleting an Ingress
 
 Deleting an Ingress removes all the routing rules it defined. The backend services continue running and are still reachable by other means (ClusterIP, NodePort), but the Ingress entry point stops working.
