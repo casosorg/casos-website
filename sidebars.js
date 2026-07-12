@@ -32,6 +32,7 @@ const sidebars = {
       items: [
         "networking/services",
         "networking/ingress",
+        "networking/tls-certificates",
         "networking/network-policies",
       ],
     },
@@ -53,7 +54,16 @@ const sidebars = {
         "access-control/namespaces",
         "access-control/serviceaccounts",
         "access-control/clusterrolebindings",
+        "access-control/rolebindings",
         "access-control/resource-quotas",
+      ],
+    },
+    {
+      type: "category",
+      label: "Infrastructure",
+      collapsed: false,
+      items: [
+        "infrastructure/machines",
       ],
     },
     "nodes",
