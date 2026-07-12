@@ -53,7 +53,16 @@ const sidebars = {
         "access-control/namespaces",
         "access-control/serviceaccounts",
         "access-control/clusterrolebindings",
+        "access-control/rolebindings",
         "access-control/resource-quotas",
+      ],
+    },
+    {
+      type: "category",
+      label: "Infrastructure",
+      collapsed: false,
+      items: [
+        "infrastructure/machines",
       ],
     },
     "nodes",
