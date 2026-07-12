@@ -66,3 +66,5 @@ These same settings also configure the web UI: CasOS hands the public values (`c
 ## Optional: outbound proxy
 
 If your environment requires a SOCKS5 proxy to reach container registries or the Kubernetes pause image, set `socks5Proxy` to `host:port`. When this is set, CasOS automatically switches the default sandbox (pause) image to `registry.aliyuncs.com/google_containers/pause:3.10.1` instead of the upstream `registry.k8s.io` image. You can override this further with `sandboxImage`.
+
+The same proxy is used for outbound HTTP: the [App Store](/docs/app-store#fetching-charts-through-a-proxy) fetches Helm repository indexes and chart archives through it, so public chart repositories remain reachable from clusters whose egress is restricted to a proxy.

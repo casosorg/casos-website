@@ -49,6 +49,22 @@ Click **Install**. CasOS runs the Helm install on the backend and, on success, t
 The values editor is pre-filled with the chart's real defaults, not a blank box. The safest way to customize an install is to change only the keys you care about — image tags, resource limits, ingress hostnames — and leave the rest as the chart author intended.
 :::
 
+If the chart's default values can't be loaded — the repository is unreachable, or the chart archive is malformed — the install dialog shows the error inline instead of presenting an empty editor, so you know the values you're about to install with aren't the real defaults.
+
+## Fetching charts through a proxy
+
+CasOS downloads repository indexes and chart archives with a Helm-compatible HTTP client that honors the optional outbound proxy. If you've set `socks5Proxy` in the [configuration](/docs/configuration#optional-outbound-proxy), chart browsing and installs route through it automatically — the same way the platform reaches container registries. This is what lets the App Store reach public chart repositories from clusters whose egress is restricted to a proxy.
+
+The client also identifies itself with a standard Helm `User-Agent`, so repositories that reject or throttle generic HTTP clients serve CasOS the same responses they'd give the `helm` CLI.
+
+## Troubleshooting
+
+**A chart you expect isn't listed, or install fails with "chart not found."** Some repositories publish index files that CasOS's parser previously couldn't read fully, so charts appeared to be missing. CasOS now parses repository indexes the same way Helm itself does, so charts that used to be skipped show up and install normally. Click **Refresh** on the source to re-fetch its index.
+
+**Browsing a repository shows fewer charts than the repository advertises.** A repository's `index.yaml` can contain legacy or malformed entries with missing metadata. Rather than failing the whole listing, CasOS skips only the unreadable entries and shows the rest, so one bad entry no longer blocks an entire source from loading.
+
+**A repository won't load at all.** Confirm the URL points at a Helm repository root (the directory containing `index.yaml`, e.g. `https://charts.example.com`, not a link to a specific chart). If the repository is only reachable through your network's proxy, make sure `socks5Proxy` is configured as described above.
+
 ## Managing installed applications
 
 Everything you install through the App Store is a Helm release. Manage the full lifecycle — upgrades, rollbacks, history, and uninstalls — on the [Helm Releases](/docs/helm-releases) page, reachable from the **My Releases →** button in the App Store header. The individual Kubernetes objects a chart creates (Deployments, Services, and so on) also show up on their respective pages, but managing the release as a unit keeps related resources together.
