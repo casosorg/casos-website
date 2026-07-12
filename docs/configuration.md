@@ -34,6 +34,12 @@ socks5Proxy   = 127.0.0.1:10808
 apiserverPort = 6443
 apiserverBind = 127.0.0.1
 dataDir       = /var/lib/casos
+
+; -- Built-in platform dependencies (optional) ------------------------------
+storageProvisionerEnabled = true
+coreDNSImage              = docker.1ms.run/coredns/coredns:1.12.4
+localPathProvisionerImage = docker.1ms.run/rancher/local-path-provisioner:v0.0.32
+localPathHelperImage      = docker.1ms.run/library/busybox:1.37.0
 ```
 
 ## Beego settings
@@ -62,6 +68,14 @@ These same settings also configure the web UI: CasOS hands the public values (`c
 `apiserverPort` sets the HTTPS port for the embedded Kubernetes API server (default `6443`). `apiserverBind` is the IP the API server binds to and advertises — use `127.0.0.1` for local development and your machine's outbound IP for a multi-node setup. `dataDir` is where CasOS writes TLS certificates and other persistent control-plane data; make sure this directory is writable and survives reboots.
 
 `webhookPort` (default `9443`) is the HTTPS port for the internal Casbin admission and authorization webhook servers. It does not need to be exposed outside the machine.
+
+## Built-in platform dependencies
+
+On start CasOS bootstraps the in-cluster services that App Store charts assume exist — [cluster DNS and a default storage class](/docs/architecture#built-in-cluster-services). These keys control that behavior and are all optional; the defaults suit a local, single-machine cluster.
+
+`storageProvisionerEnabled` (default `true`) decides whether CasOS installs the built-in local-path storage provisioner and marks its `local-path` class as the cluster default. Set it to `false` (also accepts `no`/`off`) on clusters that already provide their own default StorageClass, so CasOS doesn't add a competing one. This provisioner writes volumes under `dataDir`, which must be an absolute path for it to start.
+
+The three image keys let an air-gapped or registry-mirrored environment override where the managed pods pull from: `coreDNSImage` is the CoreDNS image for the DNS bootstrap, while `localPathProvisionerImage` and `localPathHelperImage` are the controller and helper-pod images the storage provisioner uses. Leave them blank to accept the defaults shown above.
 
 ## Optional: outbound proxy
 

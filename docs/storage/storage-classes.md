@@ -8,6 +8,10 @@ keywords: [casos, storage class, provisioner, dynamic provisioning, pvc, kuberne
 
 A StorageClass describes *how* a piece of storage gets provisioned. When a [PersistentVolumeClaim](/docs/storage/pvcs) asks for storage, Kubernetes looks at the StorageClass it names — or the cluster's default — to decide which provisioner creates the volume, what reclaim policy it gets, and when it is bound. A cluster with a working default StorageClass can satisfy PVCs automatically; without one, claims sit in `Pending` until a volume is created by hand.
 
+## The built-in default class
+
+On a local, single-machine cluster you usually don't have to create a StorageClass at all: CasOS bootstraps a local-path provisioner and marks its `local-path` class as the cluster default, so a PVC that names no class is satisfied straight from the host's disk. This is what lets App Store charts that request storage install and bind without any manual setup. If you run on infrastructure that already provides its own default class, you can turn the built-in one off with `storageProvisionerEnabled` in the [configuration](/docs/configuration#built-in-platform-dependencies); see [Built-in cluster services](/docs/architecture#built-in-cluster-services) for how it's provisioned.
+
 ## Viewing Storage Classes
 
 Open **Storage → Storage Classes**. The list shows every StorageClass in the cluster with its provisioner, reclaim policy, volume binding mode, whether volume expansion is allowed, and its creation time. The class currently marked as the cluster default carries a gold **Default** tag next to its name. Click **Refresh** to re-fetch the list from the API server.

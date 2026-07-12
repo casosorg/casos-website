@@ -43,6 +43,21 @@ Below the tiles is a table of the checks CasOS runs on every refresh. Each row c
 
 A healthy check stays quiet with a short "no action required" message; the checks that matter are the ones that turn yellow or red.
 
+## Monitor Issues
+
+The health checks tell you *that* something is wrong at the cluster level; the **Monitor Issues** table below them turns that into a list of specific, actionable problems — one row per affected object rather than one per check. CasOS derives the list from the same snapshot: a node that isn't `Ready`, a pod that's crash-looping or stuck pending, a PVC that never bound, an unavailable CoreDNS, and recent warning events that don't already belong to one of those objects each become an issue. Every row carries a **Severity**, the **Object** it concerns, a **Reason**, a **Message**, a **Suggestion**, and when it was **Last Seen**, and the list is sorted worst-first so the most urgent problems sit at the top. If an object already has a first-class issue, a warning event about the same object is folded into it instead of adding a duplicate row.
+
+### Diagnosing an issue
+
+Click **Diagnosis** on any issue to open the **Diagnosis Context** drawer, which gathers everything you'd otherwise collect by hand into one place:
+
+- **The issue** — its object, severity, reason, message, suggestion, and last-seen time, laid out as a summary at the top.
+- **Related events** — the recent Kubernetes events for that specific object, so you can see the sequence that led to the current state.
+- **Log preview** — for a Pod, the tail of its container logs. CasOS shows both the **Current** logs and, when available, the **Previous** container's logs (tagged so you can tell them apart), which is what you want when a container has already restarted and the useful output is in the instance that died.
+- **Diagnosis** — a compact, structured context block summarizing the issue, the object's identity, the signals CasOS observed, the evidence it collected (events and log previews), and the suggested actions. It's assembled in a machine-readable shape so you can hand it straight to an AI assistant or paste it into a ticket without hand-writing a summary.
+
+If you open the drawer for an object that has no active issue, CasOS says so plainly rather than inventing a problem — the diagnosis still pulls the object's events and logs, so it doubles as a quick way to inspect any object the monitor knows about.
+
 ## Event Center
 
 The bottom section is a live feed of recent Kubernetes events — the same stream `kubectl get events` surfaces, sorted newest-first. Each row shows the event's time, type (`Normal` or `Warning`), namespace, involved object, reason, message, and how many times it has fired. Click **Details** on any row to open the full event, including its source and reporting controller.

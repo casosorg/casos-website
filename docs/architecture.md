@@ -41,10 +41,19 @@ Separately, a [Casbin admission webhook](/docs/security/admission-policies) (`Va
 
 Both webhooks are registered automatically during the bootstrap phase.
 
+## Built-in cluster services
+
+A bare Kubernetes control plane can schedule pods but can't resolve service names or hand out storage on its own — the pieces a fresh cluster normally lacks are exactly the ones an [App Store](/docs/app-store) chart expects to find. So during bootstrap CasOS also reconciles two in-cluster services into the desired state, creating them on first start and healing them if their pod template drifts:
+
+- **Cluster DNS (CoreDNS).** CasOS installs CoreDNS into `kube-system` — its ServiceAccount, RBAC, config, `Service`, and `Deployment` — so pods can resolve each other and external names. It only manages CoreDNS when the `kube-system/kube-dns` service is CasOS-owned; if something else already runs DNS, CasOS steps back and leaves it alone rather than fighting over it.
+- **Default storage (local-path provisioner).** For a local, single-machine cluster CasOS installs the local-path provisioner and marks its `local-path` StorageClass as the cluster default, so a [PersistentVolumeClaim](/docs/storage/pvcs) can be satisfied out of the host's disk with no cloud volume plugin. Volumes are provisioned under `<dataDir>/local-path-provisioner`, which is why `dataDir` must be an absolute path for this to run. This step is on by default and can be turned off with `storageProvisionerEnabled` in [configuration](/docs/configuration#built-in-platform-dependencies) on clusters that bring their own storage.
+
+The images for both are configurable, so an air-gapped or proxy-restricted install can point them at a reachable registry mirror. Because the reconcile is idempotent, restarting CasOS never creates duplicates — it converges whatever is there back to the managed definition.
+
 ## Authentication via Casdoor
 
 CasOS does not manage user accounts itself. Every login is handled by [Casdoor](https://casdoor.org) over OAuth2/OIDC. The user's browser is redirected to Casdoor, the user authenticates there, and Casdoor sends an authorization code back to CasOS, which exchanges it for a token. This keeps identity management entirely out of CasOS and means you can connect any identity provider that Casdoor supports — Google, GitHub, LDAP, SAML, and more.
 
 ## Startup sequence
 
-When CasOS starts it follows a fixed sequence: generate TLS certs if missing → start kine → wait for MySQL → start the API server → poll `/readyz` until healthy → run Bootstrap (RBAC bindings + webhook registration) → start controller-manager and scheduler → start the Beego HTTP server. The web UI only becomes reachable once the entire chain has completed, so if the UI loads, the Kubernetes API is already healthy.
+When CasOS starts it follows a fixed sequence: generate TLS certs if missing → start kine → wait for MySQL → start the API server → poll `/readyz` until healthy → run Bootstrap (RBAC bindings, cluster DNS, default storage, and webhook registration) → start controller-manager and scheduler → start the Beego HTTP server. The web UI only becomes reachable once the entire chain has completed, so if the UI loads, the Kubernetes API is already healthy.

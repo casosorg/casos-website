@@ -26,7 +26,7 @@ The replica counter next to each deployment row lets you scale up or down withou
 
 ## Exposing a deployment
 
-Click **Expose** on a deployment to create a Service that routes traffic to its pods. You choose the Service type: `ClusterIP` for internal-only access, `NodePort` to reach the service on a port of every node, or `LoadBalancer` when your environment provides a cloud load balancer. CasOS fills in the pod selector automatically from the deployment's labels.
+Click **Expose** on a deployment to create a Service that routes traffic to its pods. You choose the Service type: `ClusterIP` for internal-only access, `NodePort` to reach the service on a port of every node, or `LoadBalancer` when your environment provides a cloud load balancer. CasOS fills in the pod selector automatically from the deployment's labels, and pre-fills the service and target ports from the deployment's first declared container port — so a workload that advertises port `8080` opens the dialog with `8080` already in place instead of a generic default you'd have to correct. Deployments that declare no container port fall back to `80`.
 
 ## Attaching persistent storage
 
