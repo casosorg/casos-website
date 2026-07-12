@@ -21,6 +21,7 @@ const sidebars = {
       items: [
         "workloads/deployments",
         "workloads/statefulsets",
+        "workloads/daemonsets",
         "workloads/cronjobs",
         "workloads/pods",
       ],

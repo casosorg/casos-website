@@ -55,6 +55,8 @@ CREATE DATABASE IF NOT EXISTS casos CHARACTER SET utf8mb4;
 
 `casdoorEndpoint` is the URL of your Casdoor instance. `clientId` and `clientSecret` come from the Casdoor application you created. `casdoorOrganization` and `casdoorApplication` must match exactly what you set in Casdoor. See [Authentication](/docs/authentication) for the full setup walkthrough.
 
+These same settings also configure the web UI: CasOS hands the public values (`casdoorEndpoint`, `clientId`, `casdoorApplication`, `casdoorOrganization`) to the browser at page load, so the frontend's login flow is driven entirely by `app.conf`. There is no separate frontend auth config to edit, and `clientSecret` is never sent to the browser.
+
 ## Control plane
 
 `apiserverPort` sets the HTTPS port for the embedded Kubernetes API server (default `6443`). `apiserverBind` is the IP the API server binds to and advertises — use `127.0.0.1` for local development and your machine's outbound IP for a multi-node setup. `dataDir` is where CasOS writes TLS certificates and other persistent control-plane data; make sure this directory is writable and survives reboots.

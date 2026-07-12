@@ -36,6 +36,10 @@ casdoorApplication  = app-casibase
 
 All four values must match exactly what you configured in Casdoor. After editing `app.conf`, restart CasOS. The next time a user opens CasOS, they will be redirected to your Casdoor instance's login page.
 
+:::info Backend-driven frontend config
+You configure authentication in one place — `conf/app.conf` — and nowhere else. The web UI does **not** ship with hardcoded Casdoor values. When the browser loads the app, CasOS serves the public parts of the auth config (`casdoorEndpoint`, `clientId`, `casdoorApplication`, `casdoorOrganization`) to the frontend automatically, and the UI initializes its Casdoor SDK from them at startup. Changing a value in `app.conf` and restarting is enough to point the whole application — backend and frontend — at a different Casdoor instance; you never need to edit frontend source or rebuild the web bundle. The `clientSecret` stays on the backend and is never exposed to the browser.
+:::
+
 ## Quick start with the demo instance
 
 The default `conf/app.conf` in the repository is pre-configured to use `https://door.casdoor.com`. You can log in immediately with the demo credentials:

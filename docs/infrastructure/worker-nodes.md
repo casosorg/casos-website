@@ -97,6 +97,8 @@ A deployment moves through these phases:
 
 If any phase fails, the task moves to **failed** and the error is shown alongside the logs. Only one deployment task can be active for a machine at a time.
 
+During the **installing** phase, CasOS fetches the `kubelet`, `kube-proxy`, and CNI binaries that match your control plane's Kubernetes version from the official `dl.k8s.io` release channel. If the API server reports a distribution-specific version — for example `v1.36.1-k3s1` from a k3s-based control plane — CasOS strips the suffix down to the upstream release (`v1.36.1`) so the correct binaries are found. A download that cannot be reached is reported explicitly in the logs rather than failing silently.
+
 ## Repairing a node
 
 If a previously deployed node stops working — for example the kubelet is not running after a host reboot, or its join configuration drifted — open the machine and click **Repair Node**. Repair reruns the configuring and starting steps against the existing node rather than installing everything from scratch, and streams its logs the same way a deployment does.
