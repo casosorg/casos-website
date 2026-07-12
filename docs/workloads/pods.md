@@ -24,7 +24,7 @@ Click **Terminal** to open an interactive shell directly in the pod's container 
 The terminal requires the pod to be in `Running` phase and the container to have a shell — either `/bin/sh` or `/bin/bash`. Containers built from distroless or scratch images will not have a shell and the terminal will not connect.
 :::
 
-The terminal prefers `bash` when the image ships it and falls back to `sh` otherwise, so you get command history and line editing wherever they're available. Keystrokes, command output, and window resizes all travel over a single WebSocket, and resizing the drawer or your browser window reflows the shell to match. When the shell exits or the connection drops, the terminal prints a `[connection closed]` notice and cleanly tears the session down rather than hanging, and opening the terminal again starts a fresh session — so a session that ends badly never leaves the next one in a stuck state.
+The terminal prefers `bash` when the image ships it and falls back to `sh` otherwise, so you get command history and line editing wherever they're available. Keystrokes, command output, and window resizes all travel over a single WebSocket, and resizing the drawer or your browser window reflows the shell to match. When the shell exits or the connection drops, the terminal prints a `[connection closed]` notice and cleanly tears the session down rather than hanging, and opening the terminal again starts a fresh session — so a session that ends badly never leaves the next one in a stuck state. Ending the shell yourself — typing `exit` or pressing `Ctrl-D` — closes the connection once and cleanly, the same as when the exec session ends on its own, so the drawer never gets caught trying to close a session twice.
 
 ## File browser
 

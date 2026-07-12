@@ -34,6 +34,12 @@ Click **Refresh** to reload the current source.
 
 To install from a private or third-party repository that isn't in the presets, click **Add Repo** in the sidebar and enter a name and the repository's URL (for example `https://charts.example.com`). It's saved under **My Repos** in the sidebar and can be browsed like any preset. Remove a custom repository with the delete icon next to its name.
 
+### OCI-based repositories
+
+Charts are increasingly published to OCI registries — a container registry such as Docker Hub or GitHub Container Registry — instead of a classic `index.yaml`-based repository. To add one, use its `oci://` URL as the repository URL, for example `oci://registry-1.docker.io/casbin/casdoor-helm-charts`. CasOS detects the `oci://` scheme and pulls the chart straight from the registry rather than fetching an index file.
+
+An OCI reference addresses a single chart rather than a whole catalog, so the source lists just that one chart; install it exactly like any other. When you leave the install **Version** blank, CasOS resolves to the newest published tag in the registry. OCI pulls use the same proxy-aware Helm client as everything else, so a configured `socks5Proxy` applies here too.
+
 ## Installing a chart
 
 Click **Install** on a chart card to open the install dialog. Fill in:
