@@ -43,7 +43,13 @@ Click **Install** on a chart card to open the install dialog. Fill in:
 - **Version** — the chart version to install. Leave it blank to use the latest.
 - **Values (YAML)** — the chart's configuration. CasOS fetches the chart's default `values.yaml` and shows it in an editable text area, so you can review every setting and override just the ones you need before installing.
 
-Click **Install**. CasOS runs the Helm install on the backend and, on success, the application appears on the [Helm Releases](/docs/helm-releases) page. From there you can upgrade it, view its revision history, roll it back, or uninstall it.
+Click **Install**. The dialog switches to a live console that streams the Helm install log line by line as the backend works, so you can watch the release come up instead of waiting on a spinner. When the install succeeds, the final line turns green and a **Done** button appears — click it to close the dialog and find the application on the [Helm Releases](/docs/helm-releases) page, where you can upgrade it, view its revision history, roll it back, or uninstall it. If the install fails, the error is shown inline in red so you can read exactly what Helm reported.
+
+CasOS considers the install finished once Helm has created the release's Kubernetes objects — it does not block waiting for every Pod to become ready. A chart that pulls large images or waits on storage can still be settling after the dialog reports success; watch the release's status on [Helm Releases](/docs/helm-releases), or the individual objects on their own pages, to see when everything is actually running.
+
+### Aborting an install
+
+While an install is in progress the dialog stays open — you can't dismiss it by clicking outside — and shows an **Abort** button next to the log. Click **Abort** to cancel: CasOS stops the backend operation instead of leaving it running after you've walked away. Because Kubernetes objects are created as the install proceeds, aborting part-way can leave a partially created release behind, and CasOS warns you when it does. If you see that warning, uninstall the release from [Helm Releases](/docs/helm-releases) to clean up whatever was created before trying again.
 
 :::tip
 The values editor is pre-filled with the chart's real defaults, not a blank box. The safest way to customize an install is to change only the keys you care about — image tags, resource limits, ingress hostnames — and leave the rest as the chart author intended.

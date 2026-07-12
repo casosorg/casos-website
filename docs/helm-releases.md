@@ -17,7 +17,7 @@ The table lists your Helm releases with:
 - **Release name** — the name you gave the installation.
 - **Chart** — the chart and its version, e.g. `nginx` tagged `18.1.0`.
 - **Namespace** — the namespace the release is installed in.
-- **Status** — a colored badge for the release's current Helm state: **deployed** (green), **failed** (red), a **pending** state (orange) while an install, upgrade, or rollback is in progress, **superseded** (grey) for an old revision, or **uninstalling** while it is being removed.
+- **Status** — a colored badge for the release's current Helm state: **deployed** (green), **failed** (red), a **pending** state (orange) while an install, upgrade, or rollback is in progress, **superseded** (grey) for an old revision, or **uninstalling** while it is being removed. When a release is **failed**, hover over the red badge to read Helm's description of what went wrong — the same message the failed install or upgrade returned — without opening the history drawer.
 - **App version** — the upstream application version the chart packages (distinct from the chart version).
 - **Last deployed** — when the current revision was applied.
 

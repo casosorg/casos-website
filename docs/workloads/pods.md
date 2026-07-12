@@ -24,6 +24,8 @@ Click **Terminal** to open an interactive shell directly in the pod's container 
 The terminal requires the pod to be in `Running` phase and the container to have a shell — either `/bin/sh` or `/bin/bash`. Containers built from distroless or scratch images will not have a shell and the terminal will not connect.
 :::
 
+The terminal prefers `bash` when the image ships it and falls back to `sh` otherwise, so you get command history and line editing wherever they're available. Keystrokes, command output, and window resizes all travel over a single WebSocket, and resizing the drawer or your browser window reflows the shell to match. When the shell exits or the connection drops, the terminal prints a `[connection closed]` notice and cleanly tears the session down rather than hanging, and opening the terminal again starts a fresh session — so a session that ends badly never leaves the next one in a stuck state.
+
 ## File browser
 
 Click **Files** to browse the container's filesystem. You can navigate directories and read file contents directly from the UI. This is useful for inspecting config files that were mounted as ConfigMaps or Secrets, or for quickly checking a log file that is written to disk rather than stdout.
