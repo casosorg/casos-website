@@ -22,6 +22,7 @@ const sidebars = {
         "workloads/deployments",
         "workloads/statefulsets",
         "workloads/daemonsets",
+        "workloads/jobs",
         "workloads/cronjobs",
         "workloads/pods",
       ],
@@ -70,8 +71,17 @@ const sidebars = {
     },
     "nodes",
     "hpa",
-    "logs",
+    {
+      type: "category",
+      label: "Observability",
+      collapsed: false,
+      items: [
+        "logs",
+        "observability/topology",
+      ],
+    },
     "app-store",
+    "helm-releases",
     {
       type: "category",
       label: "Security",

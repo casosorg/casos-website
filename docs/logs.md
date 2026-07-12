@@ -10,7 +10,9 @@ When a Deployment runs multiple replicas, the logs you care about are spread acr
 
 ## Finding the Log Search page
 
-You can get there two ways. From the sidebar, navigate to **Logs** and use the namespace and deployment selectors to choose what to look at. Or, if you already know which deployment you care about, click **Logs** directly on its row in **Workloads → Deployments** — CasOS jumps to Log Search with the namespace and deployment already selected.
+You can get there two ways. From the sidebar, navigate to **Observability → Log Search** and use the namespace and deployment selectors to choose what to look at. Or, if you already know which deployment you care about, click **Logs** directly on its row in **Workloads → Deployments** — CasOS jumps to Log Search with the namespace and deployment already selected.
+
+Log Search lives in the **Observability** section of the sidebar, alongside [Resource Topology](/docs/observability/topology).
 
 ## How aggregation works
 
