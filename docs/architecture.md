@@ -29,6 +29,8 @@ CasOS process
 
 On first start, CasOS generates a self-signed CA and issues all the certificates Kubernetes needs: the API server cert, the kubelet client cert, and a service-account key pair. All of these are written to `<dataDir>/tls/` and reused on subsequent restarts, so the cluster identity stays stable across reboots.
 
+The API server's serving certificate lists the host's addresses — loopback, the configured and advertised IPs, and every local interface — as subject alternative names, so clients connecting on any of them get a valid certificate. If those addresses change, for example after the machine moves networks or is reassigned a new IP by DHCP, the old certificate no longer matches. CasOS checks the serving certificate on every start: if it can't be verified against the CA or no longer covers the current set of IPs, only that certificate is reissued to include them. The CA and the rest of the cluster identity are left untouched, so a changed address heals itself on the next restart without invalidating existing kubeconfigs.
+
 ## Authorization layers
 
 CasOS uses two authorization layers that work together. The first is standard Kubernetes RBAC (`Node,RBAC`), which every Kubernetes cluster uses. The second is a Casbin-based [authorization webhook](/docs/security/authorization-policies) that runs on port `9443`. When any Casbin authorization rules are present, the API server switches to `Node,RBAC,Webhook` mode and consults the webhook on every request. This gives you policy-as-data control over who can read, write, or delete any resource — on top of RBAC.

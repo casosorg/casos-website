@@ -38,7 +38,7 @@ To install from a private or third-party repository that isn't in the presets, c
 
 Charts are increasingly published to OCI registries — a container registry such as Docker Hub or GitHub Container Registry — instead of a classic `index.yaml`-based repository. To add one, use its `oci://` URL as the repository URL, for example `oci://registry-1.docker.io/casbin/casdoor-helm-charts`. CasOS detects the `oci://` scheme and pulls the chart straight from the registry rather than fetching an index file.
 
-An OCI reference addresses a single chart rather than a whole catalog, so the source lists just that one chart; install it exactly like any other. When you leave the install **Version** blank, CasOS resolves to the newest published tag in the registry. OCI pulls use the same proxy-aware Helm client as everything else, so a configured `socks5Proxy` applies here too.
+An OCI reference addresses a single chart rather than a whole catalog, so the source lists just that one chart; install it exactly like any other. When you leave the install **Version** blank, CasOS lists the registry's tags and resolves to the newest one by semantic version — so a registry that also carries older releases or non-semver tags still installs the latest real release rather than whatever tag happens to sort first. You can also pin a version directly in the URL: a `:tag` suffix (`oci://registry-1.docker.io/casbin/casdoor-helm-charts:1.2.3`) selects that tag, and a `@sha256:…` digest pins an exact, immutable image — which is why a digest reference can't be combined with a separate **Version**. OCI pulls use the same proxy-aware Helm client as everything else, so a configured `socks5Proxy` applies here too.
 
 ## Installing a chart
 
@@ -52,6 +52,10 @@ Click **Install** on a chart card to open the install dialog. Fill in:
 Click **Install**. The dialog switches to a live console that streams the Helm install log line by line as the backend works, so you can watch the release come up instead of waiting on a spinner. When the install succeeds, the final line turns green and a **Done** button appears — click it to close the dialog and find the application on the [Helm Releases](/docs/helm-releases) page, where you can upgrade it, view its revision history, roll it back, or uninstall it. If the install fails, the error is shown inline in red so you can read exactly what Helm reported.
 
 CasOS considers the install finished once Helm has created the release's Kubernetes objects — it does not block waiting for every Pod to become ready. A chart that pulls large images or waits on storage can still be settling after the dialog reports success; watch the release's status on [Helm Releases](/docs/helm-releases), or the individual objects on their own pages, to see when everything is actually running.
+
+Each install runs under a time limit on the backend, so a release that never converges is reported as a failure instead of streaming forever, and the dialog only shows **Done** when the backend has actually signaled completion — if the connection drops mid-install the log ends with an error rather than falsely reporting success.
+
+When an install does fail, CasOS doesn't just surface Helm's own error. It inspects the target namespace for the objects the release created and appends a diagnostic report to the message: the state of the Deployments, ReplicaSets, Services, and Pods (replica counts, pod phases, restart counts, container states and termination reasons) together with the most recent related Kubernetes events. A chart that fails because an image can't be pulled or a Pod is crash-looping usually says so directly in the log, so you can tell what went wrong without switching to `kubectl`.
 
 ### Aborting an install
 
