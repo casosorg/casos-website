@@ -44,6 +44,7 @@ const sidebars = {
       collapsed: false,
       items: [
         "storage/pvcs",
+        "storage/storage-classes",
         "storage/configmaps",
         "storage/secrets",
       ],
@@ -76,6 +77,7 @@ const sidebars = {
       label: "Observability",
       collapsed: false,
       items: [
+        "observability/monitor",
         "logs",
         "observability/topology",
       ],
