@@ -55,7 +55,7 @@ function HomepageHeader() {
               <Link className={styles.btnPrimary} to="/docs/overview">
                 Get started →
               </Link>
-              <Link className={styles.btnGhost} href="https://casos.casnode.com">
+              <Link className={styles.btnGhost} href="https://demo.casos.net">
                 Live demo
               </Link>
               <Link className={styles.btnGhost} href="https://github.com/casosorg/casos">

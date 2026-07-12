@@ -51,7 +51,7 @@ module.exports = {
           position: "right",
         },
         {
-          href: "https://discord.gg/5rPsrAzK7S",
+          href: "https://discord.gg/6ma4BAmV7P",
           label: "Discord",
           position: "right",
         },
@@ -82,7 +82,7 @@ module.exports = {
             },
             {
               label: "Discord",
-              href: "https://discord.gg/5rPsrAzK7S",
+              href: "https://discord.gg/6ma4BAmV7P",
             },
             {
               label: "Issues",
@@ -99,7 +99,7 @@ module.exports = {
             },
             {
               label: "Live Demo",
-              href: "https://casos.casnode.com",
+              href: "https://demo.casos.net",
             },
           ],
         },

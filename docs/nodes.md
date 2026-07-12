@@ -20,6 +20,10 @@ The node list shows each node's allocatable CPU and memory — the amount availa
 
 ## Adding worker nodes
 
-CasOS runs the embedded control plane — the API server, scheduler, and controller manager. To actually schedule workloads you need at least one node with a kubelet. Install `kubelet` and `containerd` on the worker machine, then join it to the CasOS API server at `https://<casos-host>:<apiserverPort>` using a bootstrap token or a kubeconfig. See the [upstream kubelet documentation](https://kubernetes.io/docs/concepts/architecture/nodes/) for the join procedure.
+CasOS runs the embedded control plane — the API server, scheduler, and controller manager. To actually schedule workloads you need at least one node with a kubelet.
+
+The easiest way to add one is to let CasOS do it for you. [Register the machine](/docs/infrastructure/machines), then use [Worker Node Deployment](/docs/infrastructure/worker-nodes) to install the container runtime and kubelet over SSH and join the machine to the cluster automatically — no manual `kubeadm` or kubeconfig handling required.
+
+If you prefer to join a node by hand, install `kubelet` and `containerd` on the worker machine and join it to the CasOS API server at `https://<casos-host>:<apiserverPort>` using a bootstrap token or a kubeconfig. See the [upstream kubelet documentation](https://kubernetes.io/docs/concepts/architecture/nodes/) for the join procedure.
 
 In a single-machine setup, the machine running CasOS itself can also run a kubelet and act as a worker node.

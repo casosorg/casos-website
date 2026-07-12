@@ -9,7 +9,7 @@ keywords: [casos, kubernetes, cloud os]
 
 CasOS is a cloud operating system built on Kubernetes. It embeds the full Kubernetes control plane — API server, controller manager, and scheduler — inside a single Go binary, so you do not need an existing cluster, a separate etcd installation, or any Kubernetes bootstrap tooling. Run one binary, point it at a MySQL database, and you have a fully functional cloud OS with a built-in web UI.
 
-The live demo is available at [https://casos.casnode.com](https://casos.casnode.com).
+The live demo is available at [https://demo.casos.net](https://demo.casos.net).
 
 ## What problem it solves
 

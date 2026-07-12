@@ -64,6 +64,7 @@ const sidebars = {
       collapsed: false,
       items: [
         "infrastructure/machines",
+        "infrastructure/worker-nodes",
       ],
     },
     "nodes",

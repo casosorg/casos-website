@@ -34,4 +34,4 @@ Open a machine to update its connection details, then save. Deleting a machine r
 
 ## Deploying a machine as a node
 
-Once a machine is registered, CasOS can install the kubelet and container runtime over SSH and join it to the cluster as a worker node — see [Nodes](/docs/nodes) for the deployment flow and the SSH prerequisites the target machine must meet.
+Once a machine is registered, CasOS can install the kubelet and container runtime over SSH and join it to the cluster as a worker node — see [Worker Node Deployment](/docs/infrastructure/worker-nodes) for the deployment flow and the SSH prerequisites the target machine must meet.

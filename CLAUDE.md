@@ -2,7 +2,7 @@
 
 Docusaurus documentation site for [CasOS](https://github.com/casosorg/casos) — a cloud operating system built on Kubernetes. CasOS embeds the full Kubernetes control plane (API server, controller manager, scheduler), so no external cluster is needed. Authentication is via [Casdoor](https://casdoor.org) (OAuth2/OIDC).
 
-Live demo: https://casos.casnode.com
+Live demo: https://demo.casos.net
 
 ## Package manager
 
