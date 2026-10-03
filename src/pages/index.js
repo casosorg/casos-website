@@ -52,7 +52,7 @@ function HomepageHeader() {
               No external cluster, no kubeadm, no extra moving parts.
             </p>
             <div className={styles.buttons}>
-              <Link className={styles.btnPrimary} to="/docs/overview">
+              <Link className={styles.btnPrimary} to="/docs/">
                 Get started →
               </Link>
               <Link className={styles.btnGhost} href="https://demo.casos.net">

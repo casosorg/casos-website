@@ -6,7 +6,7 @@ const darkCodeTheme = themes.dracula;
 module.exports = {
   title: "CasOS",
   tagline: "A cloud operating system built on Kubernetes",
-  url: "https://casosorg.github.io",
+  url: "https://www.casos.net",
   baseUrl: "/",
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
@@ -65,7 +65,7 @@ module.exports = {
           items: [
             {
               label: "Overview",
-              to: "/docs/overview",
+              to: "/docs/",
             },
             {
               label: "Get Started",
